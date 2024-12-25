@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2025 Calendar</title>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+  <div id="calendar" class="container mx-auto bg-white shadow-md p-6 rounded-lg">
+    <h1 class="text-3xl font-bold text-center mb-6">2025 Calendar</h1>
+    <div class="grid grid-cols-4 gap-4">
+      <!-- Generate months dynamically -->
+      <script>
+        const months = [
+          "January", "February", "March", "April", 
+          "May", "June", "July", "August", 
+          "September", "October", "November", "December"
+        ];
+        const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+        document.addEventListener("DOMContentLoaded", () => {
+          const container = document.querySelector(".grid");
+          months.forEach((month, index) => {
+            const monthDiv = document.createElement("div");
+            monthDiv.classList.add("border", "p-4", "rounded-lg", "bg-gray-50");
+            
+            // Month header
+            monthDiv.innerHTML = `
+              <h2 class="text-lg font-bold text-center">${month}</h2>
+              <div class="grid grid-cols-7 text-center mt-2">
+                ${days.map(day => `<div class="font-semibold text-sm">${day}</div>`).join("")}
+              </div>
+              <div class="grid grid-cols-7 text-center text-sm mt-2 gap-1">
+                ${generateDays(2025, index)}
+              </div>
+            `;
+            container.appendChild(monthDiv);
+          });
+        });
+
+        function generateDays(year, month) {
+          const date = new Date(year, month, 1);
+          let daysHTML = "";
+
+          // Add blank days for previous month's overflow
+          for (let i = 0; i < date.getDay(); i++) {
+            daysHTML += `<div></div>`;
+          }
+
+          // Add days of the current month
+          while (date.getMonth() === month) {
+            daysHTML += `<div class="py-1 rounded bg-gray-200 hover:bg-gray-300 cursor-pointer">${date.getDate()}</div>`;
+            date.setDate(date.getDate() + 1);
+          }
+
+          return daysHTML;
+        }
+      </script>
+    </div>
+  </div>
+  
+  <div class="text-center mt-6">
+    <button 
+      class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600" 
+      onclick="downloadPDF()"
+    >
+      Download as PDF
+    </button>
+  </div>
+
+  <script>
+    function downloadPDF() {
+      const element = document.getElementById("calendar");
+      const options = {
+        margin: 0.5,
+        filename: '2025-calendar.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      html2pdf().set(options).from(element).save();
+    }
+  </script>
+</body>
+</html>
