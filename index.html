@@ -25,7 +25,7 @@
       <h2 class="text-2xl font-semibold">Choose Your Country</h2>
       <p class="mt-4 text-gray-700">Select your country to view holidays specific to your region.</p>
       <div class="mt-4">
-        <select id="countryDropdown" class="w-64 px-4 py-2 border rounded-lg text-gray-700 bg-white shadow-sm">
+        <select id="countryDropdown" class="w-full sm:w-64 px-4 py-2 border rounded-lg text-gray-700 bg-white shadow-sm">
           <option value="india" selected>India</option>
           <option value="usa">USA</option>
           <option value="uk">United Kingdom</option>
@@ -38,7 +38,7 @@
     <!-- Calendar Section -->
     <div id="calendar" class="bg-white rounded-lg shadow-md p-6">
       <h3 class="text-xl font-bold mb-4">2025 Calendar with Holiday List</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Calendar months rendered by JavaScript -->
       </div>
     </div>
@@ -175,8 +175,7 @@
     document.addEventListener("DOMContentLoaded", () => renderCalendar("india"));
 
     function downloadPDF() {
-      
-    const element = document.getElementById('calendar');
+      const element = document.getElementById('calendar');
       
       // Create a new instance of html2pdf with options
       const options = {
