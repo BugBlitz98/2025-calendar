@@ -3,130 +3,142 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2025 Holiday Calendar</title>
+  <meta name="description" content="Download your 2025 calendar for free in PDF format! Includes a complete 2025 holiday list with marked holidays. Perfect for planning your year.">
+  <meta name="keywords" content="2025 calendar, 2025 free calendar download PDF format, 2025 holiday list">
+  <meta name="author" content="Your Name">
+  <title>2025 Calendar | Free PDF Download with Holiday List</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gradient-to-br from-blue-100 to-purple-200 p-6">
+<body class="bg-gray-50 text-gray-800">
+
   <!-- Header Section -->
-  <header class="text-center mb-8">
-    <h1 class="text-4xl font-extrabold text-gray-800 drop-shadow-lg">2025 Holiday Calendar</h1>
-    <p class="text-lg text-gray-600 mt-2">Mark your year with celebrations and events</p>
+  <header class="bg-blue-600 text-white py-6 text-center shadow-md">
+    <h1 class="text-4xl font-bold">2025 Calendar</h1>
+    <p class="mt-2 text-lg">Free PDF Download with Complete 2025 Holiday List</p>
   </header>
 
-  <!-- Calendar Section -->
-  <div id="calendar" class="bg-white rounded-2xl shadow-lg p-6 container mx-auto">
-    <div class="grid grid-cols-3 md:grid-cols-4 gap-6">
-      <!-- Dynamic Months -->
-      <script>
-      
-        function downloadPDF() {
+  <!-- Main Content -->
+  <main class="container mx-auto my-10 px-4">
+    <!-- Introduction Section -->
+    <section class="text-center mb-8">
+      <h2 class="text-2xl font-semibold">Plan Your Year with the 2025 Calendar</h2>
+      <p class="mt-4 text-gray-700">Our 2025 calendar includes all major holidays, events, and important dates. Easily download it in PDF format for free and start planning today.</p>
+    </section>
+
+    <!-- Calendar Section -->
+    <div id="calendar" class="bg-white rounded-lg shadow-md p-6">
+      <h3 class="text-xl font-bold mb-4">2025 Calendar with Holiday List</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Each Month Block Will Be Rendered Here -->
+        <script>
+          const holidays = {
+            0: [{ date: 1, name: "New Year's Day" }],
+            1: [{ date: 14, name: "Valentine's Day" }],
+            3: [{ date: 7, name: "Easter Sunday" }],
+            6: [{ date: 4, name: "Independence Day" }],
+            10: [{ date: 28, name: "Thanksgiving" }],
+            11: [
+              { date: 25, name: "Christmas Day" },
+              { date: 31, name: "New Year's Eve" }
+            ],
+          };
+
+          const months = [
+            "January", "February", "March", "April", 
+            "May", "June", "July", "August", 
+            "September", "October", "November", "December"
+          ];
+          const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+          document.addEventListener("DOMContentLoaded", () => {
+            const container = document.querySelector(".grid");
+            months.forEach((month, index) => {
+              const monthDiv = document.createElement("div");
+              monthDiv.classList.add(
+                "border", "rounded-lg", "bg-gradient-to-b", 
+                "from-indigo-50", "to-white", "p-4", 
+                "shadow-sm", "hover:shadow-lg", "transition-shadow"
+              );
+
+              const daysHTML = generateDays(2025, index);
+              monthDiv.innerHTML = `
+                <h4 class="text-lg font-semibold text-gray-800 text-center mb-2">${month}</h4>
+                <div class="grid grid-cols-7 text-center text-sm font-bold text-gray-600">
+                  ${days.map(day => `<div>${day}</div>`).join("")}
+                </div>
+                <div class="grid grid-cols-7 text-center text-sm mt-2 gap-1 text-gray-700">
+                  ${daysHTML}
+                </div>
+                <ul class="mt-4 text-sm text-gray-600">
+                  ${
+                    (holidays[index] || [])
+                      .map(holiday => `<li>🎉 ${holiday.date}: ${holiday.name}</li>`)
+                      .join("")
+                  }
+                </ul>
+              `;
+              container.appendChild(monthDiv);
+            });
+          });
+
+          function generateDays(year, month) {
+            const date = new Date(year, month, 1);
+            let daysHTML = "";
+
+            for (let i = 0; i < date.getDay(); i++) {
+              daysHTML += `<div></div>`;
+            }
+
+            while (date.getMonth() === month) {
+              const isHoliday = (holidays[month] || []).some(
+                holiday => holiday.date === date.getDate()
+              );
+              daysHTML += `
+                <div class="py-1 px-2 rounded-full ${
+                  isHoliday ? "bg-red-300 text-red-800 font-bold" : "bg-blue-100 hover:bg-blue-200"
+                } cursor-pointer">
+                  ${date.getDate()}
+                </div>`;
+              date.setDate(date.getDate() + 1);
+            }
+
+            return daysHTML;
+          }
+        </script>
+      </div>
+    </div>
+
+    <!-- Download Section -->
+    <div class="text-center mt-10">
+      <button 
+        class="px-6 py-3 text-lg font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:shadow-lg hover:bg-blue-700 transition"
+        onclick="downloadPDF()"
+      >
+        Download 2025 Calendar as PDF
+      </button>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-6 text-center">
+    <p>&copy; 2025 Your Name. All Rights Reserved.</p>
+    <p>Download the 2025 calendar with holidays in PDF format.</p>
+  </footer>
+
+  <!-- Download PDF Script -->
+  <script>
+    function downloadPDF() {
       const element = document.getElementById("calendar");
       const options = {
         margin: 0.5,
-        filename: '2025-calendar.pdf',
+        filename: '2025-calendar-with-holidays.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
       html2pdf().set(options).from(element).save();
     }
-        const holidays = {
-          0: [{ date: 1, name: "New Year's Day" }],
-          1: [{ date: 14, name: "Valentine's Day" }],
-          3: [{ date: 7, name: "Easter Sunday" }],
-          6: [{ date: 4, name: "Independence Day" }],
-          10: [{ date: 28, name: "Thanksgiving" }],
-          11: [
-            { date: 25, name: "Christmas Day" },
-            { date: 31, name: "New Year's Eve" }
-          ],
-        };
-
-        const months = [
-          "January", "February", "March", "April", 
-          "May", "June", "July", "August", 
-          "September", "October", "November", "December"
-        ];
-        const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-        document.addEventListener("DOMContentLoaded", () => {
-          const container = document.querySelector(".grid");
-          months.forEach((month, index) => {
-            const monthDiv = document.createElement("div");
-            monthDiv.classList.add(
-              "border", "rounded-lg", "bg-gradient-to-b", 
-              "from-indigo-50", "to-white", "p-4", 
-              "shadow-md", "hover:shadow-lg", "transition-shadow"
-            );
-
-            // Generate Days with Holidays Highlighted
-            const daysHTML = generateDays(2025, index);
-
-            // Month Header and Holiday List
-            monthDiv.innerHTML = `
-              <h2 class="text-xl font-bold text-gray-800 text-center mb-2">${month}</h2>
-              <div class="grid grid-cols-7 text-center text-sm font-semibold text-gray-600">
-                ${days.map(day => `<div>${day}</div>`).join("")}
-              </div>
-              <div class="grid grid-cols-7 text-center text-sm mt-2 gap-1 text-gray-700">
-                ${daysHTML}
-              </div>
-              <ul class="mt-4 text-sm text-gray-600">
-                ${
-                  (holidays[index] || [])
-                    .map(holiday => `<li>🎉 ${holiday.date}: ${holiday.name}</li>`)
-                    .join("")
-                }
-              </ul>
-            `;
-            container.appendChild(monthDiv);
-          });
-        });
-
-        function generateDays(year, month) {
-          const date = new Date(year, month, 1);
-          let daysHTML = "";
-
-          // Add blank days for previous month's overflow
-          for (let i = 0; i < date.getDay(); i++) {
-            daysHTML += `<div></div>`;
-          }
-
-          // Add days of the current month
-          while (date.getMonth() === month) {
-            const isHoliday = (holidays[month] || []).some(
-              holiday => holiday.date === date.getDate()
-            );
-            daysHTML += `
-              <div class="py-1 px-2 rounded-full ${
-                isHoliday ? "bg-red-300 text-red-800 font-bold" : "bg-blue-100 hover:bg-blue-200"
-              } cursor-pointer">
-                ${date.getDate()}
-              </div>`;
-            date.setDate(date.getDate() + 1);
-          }
-
-          return daysHTML;
-        }
-      </script>
-    </div>
-  </div>
-
-  <!-- Download Button -->
-  <div class="text-center mt-10">
-    <button 
-      class="px-6 py-3 text-lg font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded-full shadow-md hover:shadow-lg hover:from-blue-600 hover:to-purple-700 transition"
-      onclick="downloadPDF()"
-    >
-      Download as PDF
-    </button>
-  </div>
-
-  <script>
-    function downloadPDF() {
-      const element = document.getElementById("calendar");
-      const options = {
-        margin: 0.5,
-        filename: '2025-holiday-calendar.pdf',
-        image: { type: 'jpeg', quality: 
+  </script>
+</body>
+</html>
