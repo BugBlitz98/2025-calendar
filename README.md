@@ -11,14 +11,6 @@ A lightweight and fully responsive web page to view and download a **2025 calend
 - 🏖️ **Holiday List**: Each month displays the holidays with dates and descriptions.
 - 🎨 **Custom Styling**: Tailwind CSS ensures a clean and modern design.
 
-## Live Demo
-
-[View Live Demo](#) *(Replace with the live demo URL)*
-
-## Screenshots
-
-*(Include screenshots of the calendar and download feature here)*
-
 ## How to Use
 
 1. Clone the repository:
