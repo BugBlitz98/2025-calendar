@@ -7,7 +7,7 @@
   <meta name="keywords" content="2025 calendar, 2025 free calendar download PDF format, 2025 holiday list">
   <meta name="author" content="Your Name">
   <title>2025 Calendar | Free PDF Download with Holiday List</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -52,7 +52,7 @@
     </div>
 
     <!-- Download Section -->
-    <div class="text-center mt-10">
+    <div class="text-center mt-10" id="lol">
       <button 
         class="px-6 py-3 text-lg font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:shadow-lg hover:bg-blue-700 transition"
         onclick="downloadPDF()"
@@ -64,7 +64,7 @@
 
   <!-- Footer -->
   <footer class="bg-gray-800 text-white py-6 text-center">
-    <p>&copy; 2025  Bug Blitz. All Rights Reserved.</p>
+    <p>&copy; 2025 Your Name. All Rights Reserved.</p>
     <p>Download the 2025 calendar with holidays in PDF format.</p>
   </footer>
 
@@ -175,15 +175,23 @@
     document.addEventListener("DOMContentLoaded", () => renderCalendar("india"));
 
     function downloadPDF() {
-      const element = document.getElementById("calendar");
+      
+    const element = document.getElementById('calendar');
+      
+      // Create a new instance of html2pdf with options
       const options = {
-        margin: 0.5,
-        filename: '2025-calendar-with-holidays.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        margin:       1,
+        filename:     'document.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 4 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
-      html2pdf().set(options).from(element).save();
+
+      // Use html2pdf to generate and save PDF
+      html2pdf()
+        .from(element)
+        .set(options)
+        .save();
     }
   </script>
 </body>
