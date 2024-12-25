@@ -3,16 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2025 Calendar</title>
-  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js"></script>
+  <title>2025 Holiday Calendar</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-4">
-  <div id="calendar" class="container mx-auto bg-white shadow-md p-6 rounded-lg">
-    <h1 class="text-3xl font-bold text-center mb-6">2025 Calendar</h1>
-    <div class="grid grid-cols-4 gap-4">
-      <!-- Generate months dynamically -->
+<body class="bg-gradient-to-br from-blue-100 to-purple-200 p-6">
+  <!-- Header Section -->
+  <header class="text-center mb-8">
+    <h1 class="text-4xl font-extrabold text-gray-800 drop-shadow-lg">2025 Holiday Calendar</h1>
+    <p class="text-lg text-gray-600 mt-2">Mark your year with celebrations and events</p>
+  </header>
+
+  <!-- Calendar Section -->
+  <div id="calendar" class="bg-white rounded-2xl shadow-lg p-6 container mx-auto">
+    <div class="grid grid-cols-3 md:grid-cols-4 gap-6">
+      <!-- Dynamic Months -->
       <script>
+      
+        function downloadPDF() {
+      const element = document.getElementById("calendar");
+      const options = {
+        margin: 0.5,
+        filename: '2025-calendar.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      html2pdf().set(options).from(element).save();
+    }
+        const holidays = {
+          0: [{ date: 1, name: "New Year's Day" }],
+          1: [{ date: 14, name: "Valentine's Day" }],
+          3: [{ date: 7, name: "Easter Sunday" }],
+          6: [{ date: 4, name: "Independence Day" }],
+          10: [{ date: 28, name: "Thanksgiving" }],
+          11: [
+            { date: 25, name: "Christmas Day" },
+            { date: 31, name: "New Year's Eve" }
+          ],
+        };
+
         const months = [
           "January", "February", "March", "April", 
           "May", "June", "July", "August", 
@@ -24,17 +54,31 @@
           const container = document.querySelector(".grid");
           months.forEach((month, index) => {
             const monthDiv = document.createElement("div");
-            monthDiv.classList.add("border", "p-4", "rounded-lg", "bg-gray-50");
-            
-            // Month header
+            monthDiv.classList.add(
+              "border", "rounded-lg", "bg-gradient-to-b", 
+              "from-indigo-50", "to-white", "p-4", 
+              "shadow-md", "hover:shadow-lg", "transition-shadow"
+            );
+
+            // Generate Days with Holidays Highlighted
+            const daysHTML = generateDays(2025, index);
+
+            // Month Header and Holiday List
             monthDiv.innerHTML = `
-              <h2 class="text-lg font-bold text-center">${month}</h2>
-              <div class="grid grid-cols-7 text-center mt-2">
-                ${days.map(day => `<div class="font-semibold text-sm">${day}</div>`).join("")}
+              <h2 class="text-xl font-bold text-gray-800 text-center mb-2">${month}</h2>
+              <div class="grid grid-cols-7 text-center text-sm font-semibold text-gray-600">
+                ${days.map(day => `<div>${day}</div>`).join("")}
               </div>
-              <div class="grid grid-cols-7 text-center text-sm mt-2 gap-1">
-                ${generateDays(2025, index)}
+              <div class="grid grid-cols-7 text-center text-sm mt-2 gap-1 text-gray-700">
+                ${daysHTML}
               </div>
+              <ul class="mt-4 text-sm text-gray-600">
+                ${
+                  (holidays[index] || [])
+                    .map(holiday => `<li>🎉 ${holiday.date}: ${holiday.name}</li>`)
+                    .join("")
+                }
+              </ul>
             `;
             container.appendChild(monthDiv);
           });
@@ -51,7 +95,15 @@
 
           // Add days of the current month
           while (date.getMonth() === month) {
-            daysHTML += `<div class="py-1 rounded bg-gray-200 hover:bg-gray-300 cursor-pointer">${date.getDate()}</div>`;
+            const isHoliday = (holidays[month] || []).some(
+              holiday => holiday.date === date.getDate()
+            );
+            daysHTML += `
+              <div class="py-1 px-2 rounded-full ${
+                isHoliday ? "bg-red-300 text-red-800 font-bold" : "bg-blue-100 hover:bg-blue-200"
+              } cursor-pointer">
+                ${date.getDate()}
+              </div>`;
             date.setDate(date.getDate() + 1);
           }
 
@@ -60,10 +112,11 @@
       </script>
     </div>
   </div>
-  
-  <div class="text-center mt-6">
+
+  <!-- Download Button -->
+  <div class="text-center mt-10">
     <button 
-      class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600" 
+      class="px-6 py-3 text-lg font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-600 rounded-full shadow-md hover:shadow-lg hover:from-blue-600 hover:to-purple-700 transition"
       onclick="downloadPDF()"
     >
       Download as PDF
@@ -75,13 +128,5 @@
       const element = document.getElementById("calendar");
       const options = {
         margin: 0.5,
-        filename: '2025-calendar.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-      };
-      html2pdf().set(options).from(element).save();
-    }
-  </script>
-</body>
-</html>
+        filename: '2025-holiday-calendar.pdf',
+        image: { type: 'jpeg', quality: 
