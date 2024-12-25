@@ -20,93 +20,35 @@
 
   <!-- Main Content -->
   <main class="container mx-auto my-10 px-4">
-    <!-- Introduction Section -->
+    <!-- Country Selection Section -->
     <section class="text-center mb-8">
-      <h2 class="text-2xl font-semibold">Plan Your Year with the 2025 Calendar</h2>
-      <p class="mt-4 text-gray-700">Our 2025 calendar includes all major holidays, events, and important dates. Easily download it in PDF format for free and start planning today.</p>
+      <h2 class="text-2xl font-semibold">Choose Your Country</h2>
+      <p class="mt-4 text-gray-700">Select your country to view holidays specific to your region.</p>
+      <div class="mt-4">
+        <select id="countryDropdown" class="w-64 px-4 py-2 border rounded-lg text-gray-700 bg-white shadow-sm">
+          <option value="india" selected>India</option>
+          <option value="usa">USA</option>
+          <option value="uk">United Kingdom</option>
+          <option value="netherlands">Netherlands (Dutch)</option>
+          <option value="spain">Spain</option>
+        </select>
+      </div>
     </section>
 
     <!-- Calendar Section -->
     <div id="calendar" class="bg-white rounded-lg shadow-md p-6">
       <h3 class="text-xl font-bold mb-4">2025 Calendar with Holiday List</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Each Month Block Will Be Rendered Here -->
-        <script>
-          const holidays = {
-            0: [{ date: 1, name: "New Year's Day" }],
-            1: [{ date: 14, name: "Valentine's Day" }],
-            3: [{ date: 7, name: "Easter Sunday" }],
-            6: [{ date: 4, name: "Independence Day" }],
-            10: [{ date: 28, name: "Thanksgiving" }],
-            11: [
-              { date: 25, name: "Christmas Day" },
-              { date: 31, name: "New Year's Eve" }
-            ],
-          };
-
-          const months = [
-            "January", "February", "March", "April", 
-            "May", "June", "July", "August", 
-            "September", "October", "November", "December"
-          ];
-          const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-          document.addEventListener("DOMContentLoaded", () => {
-            const container = document.querySelector(".grid");
-            months.forEach((month, index) => {
-              const monthDiv = document.createElement("div");
-              monthDiv.classList.add(
-                "border", "rounded-lg", "bg-gradient-to-b", 
-                "from-indigo-50", "to-white", "p-4", 
-                "shadow-sm", "hover:shadow-lg", "transition-shadow"
-              );
-
-              const daysHTML = generateDays(2025, index);
-              monthDiv.innerHTML = `
-                <h4 class="text-lg font-semibold text-gray-800 text-center mb-2">${month}</h4>
-                <div class="grid grid-cols-7 text-center text-sm font-bold text-gray-600">
-                  ${days.map(day => `<div>${day}</div>`).join("")}
-                </div>
-                <div class="grid grid-cols-7 text-center text-sm mt-2 gap-1 text-gray-700">
-                  ${daysHTML}
-                </div>
-                <ul class="mt-4 text-sm text-gray-600">
-                  ${
-                    (holidays[index] || [])
-                      .map(holiday => `<li>🎉 ${holiday.date}: ${holiday.name}</li>`)
-                      .join("")
-                  }
-                </ul>
-              `;
-              container.appendChild(monthDiv);
-            });
-          });
-
-          function generateDays(year, month) {
-            const date = new Date(year, month, 1);
-            let daysHTML = "";
-
-            for (let i = 0; i < date.getDay(); i++) {
-              daysHTML += `<div></div>`;
-            }
-
-            while (date.getMonth() === month) {
-              const isHoliday = (holidays[month] || []).some(
-                holiday => holiday.date === date.getDate()
-              );
-              daysHTML += `
-                <div class="py-1 px-2 rounded-full ${
-                  isHoliday ? "bg-red-300 text-red-800 font-bold" : "bg-blue-100 hover:bg-blue-200"
-                } cursor-pointer">
-                  ${date.getDate()}
-                </div>`;
-              date.setDate(date.getDate() + 1);
-            }
-
-            return daysHTML;
-          }
-        </script>
+        <!-- Calendar months rendered by JavaScript -->
       </div>
+    </div>
+
+    <!-- Holiday List Section -->
+    <div id="holidayList" class="mt-10 bg-gray-100 p-6 rounded-lg shadow-md">
+      <h4 class="text-lg font-semibold mb-4">Holiday List</h4>
+      <ul class="list-disc list-inside text-gray-700">
+        <!-- Holiday list items rendered by JavaScript -->
+      </ul>
     </div>
 
     <!-- Download Section -->
@@ -126,8 +68,112 @@
     <p>Download the 2025 calendar with holidays in PDF format.</p>
   </footer>
 
-  <!-- Download PDF Script -->
+  <!-- Scripts -->
   <script>
+    const holidays = {
+      india: {
+        0: [{ date: 26, name: "Republic Day" }],
+        2: [{ date: 8, name: "Holi" }],
+        4: [{ date: 1, name: "Labour Day" }],
+        9: [{ date: 2, name: "Gandhi Jayanti" }],
+        10: [{ date: 14, name: "Diwali" }],
+      },
+      usa: {
+        0: [{ date: 1, name: "New Year's Day" }],
+        6: [{ date: 4, name: "Independence Day" }],
+        10: [{ date: 28, name: "Thanksgiving" }],
+        11: [{ date: 25, name: "Christmas Day" }],
+      },
+      uk: {
+        0: [{ date: 1, name: "New Year's Day" }],
+        4: [{ date: 8, name: "Early May Bank Holiday" }],
+        11: [{ date: 25, name: "Christmas Day" }],
+      },
+      netherlands: {
+        3: [{ date: 27, name: "King's Day" }],
+        4: [{ date: 4, name: "Liberation Day" }],
+        11: [{ date: 25, name: "Christmas Day" }],
+      },
+      spain: {
+        0: [{ date: 6, name: "Epiphany" }],
+        4: [{ date: 1, name: "Labour Day" }],
+        11: [{ date: 6, name: "Constitution Day" }],
+        11: [{ date: 25, name: "Christmas Day" }],
+      }
+    };
+
+    function renderHolidayList(country) {
+      const holidayListContainer = document.getElementById("holidayList").querySelector("ul");
+      holidayListContainer.innerHTML = ""; // Clear existing holidays
+      const selectedHolidays = holidays[country];
+      Object.keys(selectedHolidays).forEach(month => {
+        selectedHolidays[month].forEach(holiday => {
+          const listItem = document.createElement("li");
+          listItem.textContent = `${holiday.name} - ${months[month]} ${holiday.date}, 2025`;
+          holidayListContainer.appendChild(listItem);
+        });
+      });
+    }
+
+    // Render Calendar
+    const months = [
+      "January", "February", "March", "April", 
+      "May", "June", "July", "August", 
+      "September", "October", "November", "December"
+    ];
+
+    function renderCalendar(country) {
+      renderHolidayList(country);
+      const selectedHolidays = holidays[country] || {};
+      const container = document.querySelector(".grid");
+      container.innerHTML = ""; // Clear previous content
+      months.forEach((month, index) => {
+        const monthDiv = document.createElement("div");
+        monthDiv.classList.add("border", "rounded-lg", "bg-gradient-to-b", "from-indigo-50", "to-white", "p-4", "shadow-sm");
+
+        const daysHTML = generateDays(2025, index, selectedHolidays[index]);
+        monthDiv.innerHTML = `
+          <h4 class="text-lg font-semibold text-gray-800 text-center mb-2">${month}</h4>
+          <div class="grid grid-cols-7 text-center text-sm font-bold text-gray-600">
+            ${["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(day => `<div>${day}</div>`).join("")}
+          </div>
+          <div class="grid grid-cols-7 text-center text-sm mt-2 gap-1 text-gray-700">
+            ${daysHTML}
+          </div>
+        `;
+        container.appendChild(monthDiv);
+      });
+    }
+
+    function generateDays(year, month, monthHolidays = []) {
+      const date = new Date(year, month, 1);
+      let daysHTML = "";
+
+      for (let i = 0; i < date.getDay(); i++) {
+        daysHTML += `<div></div>`;
+      }
+
+      while (date.getMonth() === month) {
+        const isHoliday = monthHolidays.some(holiday => holiday.date === date.getDate());
+        daysHTML += `
+          <div class="py-1 px-2 rounded-full ${
+            isHoliday ? "bg-red-300 text-red-800 font-bold" : "bg-blue-100 hover:bg-blue-200"
+          } cursor-pointer">
+            ${date.getDate()}
+          </div>`;
+        date.setDate(date.getDate() + 1);
+      }
+
+      return daysHTML;
+    }
+
+    // Initial Render
+    document.getElementById("countryDropdown").addEventListener("change", (e) => {
+      renderCalendar(e.target.value);
+    });
+
+    document.addEventListener("DOMContentLoaded", () => renderCalendar("india"));
+
     function downloadPDF() {
       const element = document.getElementById("calendar");
       const options = {
